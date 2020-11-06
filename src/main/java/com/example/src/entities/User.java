@@ -4,6 +4,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,14 +18,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Users")
+@Entity
+@Table(schema = "public", name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
 
     @Id
     @Column(name="id", nullable = false, updatable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name="name", nullable = false)
     private String name;
