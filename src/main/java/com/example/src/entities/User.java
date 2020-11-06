@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Column(name="surname", nullable = false)
     private String surname;
 
-    @Column(name="email", nullable = false)
+    @Column(name="email", unique = true, updatable = false, nullable = false)
     private String email;
 
     @Column(name="password", nullable = false)
@@ -50,6 +50,10 @@ public class User implements UserDetails {
     @Builder.Default
     @Column(name="enabled")
     private Boolean enabled = false;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="confirmation_tokens_id", referencedColumnName = "id")
+    private ConfirmationToken confirmationToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

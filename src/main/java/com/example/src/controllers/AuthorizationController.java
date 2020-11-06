@@ -37,7 +37,8 @@ public class AuthorizationController {
 
     @RequestMapping(value = "/{confirmationToken}")
     public ResponseEntity<?> confirmAccount(@PathVariable String confirmationToken){
-        return ResponseCreator.createResponseMessage(null, HttpStatus.NO_CONTENT);
+        var result = userService.acceptUser(confirmationToken);
+        return ResponseCreator.createResponseMessage(result, HttpStatus.NO_CONTENT);
     }
 
 }

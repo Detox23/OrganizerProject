@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 public class ResponseCreator {
 
-
-
     public static ResponseEntity<?> createResponseMessage(Object content, HttpStatus status){
         return new ResponseEntity<>(content, new HttpHeaders(), status);
     }

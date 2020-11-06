@@ -1,6 +1,9 @@
 package com.example.src.entities;
 
 import lombok.*;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import java.util.UUID;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -14,25 +17,14 @@ import javax.persistence.*;
 public class ConfirmationToken {
 
     @Id
-    @Column(name = "id", nullable = false, unique = true, updatable = false)
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
     private UUID id = UUID.randomUUID();
 
     @Column(name="confirmation_token", nullable=false)
-    private String confirmationToken;
+    private String confirmationToken = UUID.randomUUID().toString();
 
 
     @Column(name="created_date", nullable=false)
-    private LocalDate createdDate;
-
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="id")
-    private User user;
-
-    public ConfirmationToken(User user){
-        this.user = user;
-        this.createdDate = LocalDate.now();
-        this.confirmationToken = UUID.randomUUID().toString();
-    }
-
+    private LocalDate createdDate = LocalDate.now();
 
 }

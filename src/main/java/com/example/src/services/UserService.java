@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -38,24 +39,53 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public User signUpUser(User user){
         final String encryptedPassword = _bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encryptedPassword);
-        final User createdUser = _iUserRepository.save(user);
-        final ConfirmationToken confirmationToken = new ConfirmationToken(user);
+        final ConfirmationToken confirmationToken = new ConfirmationToken();
         var result = _confirmationTokenService.saveConfirmationToken(confirmationToken);
+        user.setPassword(encryptedPassword);
+        user.setConfirmationToken(confirmationToken);
+        final User createdUser = _iUserRepository.save(user);
         if(result){
-            _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/{0}", confirmationToken));
+            _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/%s", confirmationToken.getConfirmationToken()));
         }
         return createdUser;
     }
 
-    public void confirmUser(ConfirmationToken confirmationToken){
+    public String acceptUser(String confirmationToken){
+        var token = _confirmationTokenService.getTokenId(confirmationToken);
+        if(token == null){
+            return "Confirmation token was not found.";
+        }
+        var confirmationUser = _iUserRepository.findByConfirmationTokenIs(token);
+        if(confirmationUser.isPresent()){
+            var confirmationUserFound = confirmationUser.get();
+            confirmationUserFound.setEnabled(true);
+            _iUserRepository.save(confirmationUserFound);
+            return "User accepted.";
+        }else{
+            return "User to accept was not found.";
+        }
+    }
+
+    public String blockUser(String userId){
+        var userToBlock = _iUserRepository.findById(UUID.fromString(userId));
+        if(userToBlock.isPresent()){
+            var userToBlockResult = userToBlock.get();
+            userToBlockResult.setLocked(true);
+            _iUserRepository.save(userToBlockResult);
+            return "User was blocked.";
+        }else{
+            return "User does not exist.";
+        }
+    }
+
+//    public void confirmUser(ConfirmationToken confirmationToken){
 //        final User user = confirmationToken.getUser();
 //        user.setEnabled(true);
 //        _iUserRepository.save(user);
 //        _confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
-    }
+//    }
 
 }
