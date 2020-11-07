@@ -58,6 +58,15 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public User getUser(UUID id){
+        try{
+            var user = _iUserRepository.findById(id);
+            return user.orElse(null);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     public String acceptUser(String confirmationToken){
         var token = _confirmationTokenService.getTokenId(confirmationToken);
         if(token == null){

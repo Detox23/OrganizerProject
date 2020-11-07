@@ -1,6 +1,7 @@
 package com.example.src.controllers;
 
 import com.example.src.dtos.UserForCreation;
+import com.example.src.dtos.UserForReturn;
 import com.example.src.entities.User;
 import com.example.src.services.ConfirmationTokenService;
 import com.example.src.services.UserService;
@@ -20,17 +21,13 @@ public class AuthorizationController {
 
     private final UserService userService;
 
-    private AuthenticationManager authenticationManager;
-
-    private final ConfirmationTokenService confirmationTokenService;
-
     private final ModelMapper modelMapper;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody UserForCreation user) {
         User result = userService.signUpUser(modelMapper.map(user, User.class));
         if(result == null){
-            return new ResponseEntity<>(modelMapper.map("User already exists.", UserForCreation.class), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(modelMapper.map("User already exists.", UserForReturn.class), new HttpHeaders(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(modelMapper.map(result, UserForCreation.class), new HttpHeaders(), HttpStatus.CREATED);
     }
