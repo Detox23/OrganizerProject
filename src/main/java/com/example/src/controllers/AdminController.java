@@ -1,13 +1,15 @@
 package com.example.src.controllers;
 
 
-import com.example.src.dtos.UserForLogin;
 import com.example.src.services.UserService;
 import com.example.src.utilities.ResponseCreator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
@@ -21,6 +23,4 @@ public class AdminController {
         var result = userService.blockUser(id);
         return ResponseCreator.createResponseMessage(result, HttpStatus.NO_CONTENT);
     }
-
-
 }

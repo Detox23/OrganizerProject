@@ -41,16 +41,21 @@ public class UserService implements UserDetailsService {
 
     @Transactional(rollbackFor = Exception.class)
     public User signUpUser(User user){
-        final String encryptedPassword = _bCryptPasswordEncoder.encode(user.getPassword());
-        final ConfirmationToken confirmationToken = new ConfirmationToken();
-        var result = _confirmationTokenService.saveConfirmationToken(confirmationToken);
-        user.setPassword(encryptedPassword);
-        user.setConfirmationToken(confirmationToken);
-        final User createdUser = _iUserRepository.save(user);
-        if(result){
-            _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/%s", confirmationToken.getConfirmationToken()));
+        try{
+            final String encryptedPassword = _bCryptPasswordEncoder.encode(user.getPassword());
+            final ConfirmationToken confirmationToken = new ConfirmationToken();
+            var result = _confirmationTokenService.saveConfirmationToken(confirmationToken);
+            user.setPassword(encryptedPassword);
+            user.setConfirmationToken(confirmationToken);
+            final User createdUser = _iUserRepository.save(user);
+            if(result){
+                _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/%s", confirmationToken.getConfirmationToken()));
+            }
+            return createdUser;
+        }catch(Exception exception){
+            return null;
         }
-        return createdUser;
+
     }
 
     public String acceptUser(String confirmationToken){

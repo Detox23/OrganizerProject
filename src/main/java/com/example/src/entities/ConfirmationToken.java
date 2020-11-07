@@ -1,12 +1,16 @@
 package com.example.src.entities;
 
-import lombok.*;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
-import javax.persistence.*;
+import java.util.UUID;
 
 @Getter
 @Setter
