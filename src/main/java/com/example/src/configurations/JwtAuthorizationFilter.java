@@ -46,8 +46,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request){
         var token = request.getHeader(SecurityConstants.TOKEN_HEADER);
         if(token != null){
-            var isEmpty = !token.isEmpty();
-            var startsWith = token.startsWith(SecurityConstants.TOKEN_PREFIX);
             if(!token.isEmpty() && token.startsWith(SecurityConstants.TOKEN_PREFIX)){
                 try{
                     var signingKey = SecurityConstants.JWT_SECRET.getBytes();

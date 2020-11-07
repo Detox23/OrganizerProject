@@ -1,10 +1,13 @@
 package com.example.src.configurations;
 
+import com.example.src.dtos.UserForLogin;
 import com.example.src.entities.User;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,11 +42,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
 
+    @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        var username = request.getParameter("username");
-        var password = request.getParameter("password");
-        var authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        var requestData = request.getReader().lines().collect(Collectors.joining());
+        Gson gson = new Gson();
+        var user = gson.fromJson(requestData, UserForLogin.class);
+        var authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         return _authenticationManager.authenticate(authenticationToken);
     }
 
