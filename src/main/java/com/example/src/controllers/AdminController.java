@@ -4,6 +4,7 @@ package com.example.src.controllers;
 import com.example.src.services.UserService;
 import com.example.src.utilities.ResponseCreator;
 import lombok.AllArgsConstructor;
+import lombok.var;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

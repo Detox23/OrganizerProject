@@ -4,6 +4,7 @@ import com.example.src.entities.ConfirmationToken;
 import com.example.src.entities.User;
 import com.example.src.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
+import lombok.var;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -6,6 +6,7 @@ import com.example.src.services.ConfirmationTokenService;
 import com.example.src.services.UserService;
 import com.example.src.utilities.ResponseCreator;
 import lombok.AllArgsConstructor;
+import lombok.var;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
