@@ -5,6 +5,7 @@ import com.example.src.repositories.ITaskRepository;
 import com.example.src.repositories.IUserRepository;
 import com.example.src.utilities.GetLoggedUser;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,6 +31,22 @@ public class TaskService {
 
         }
     }
+
+
+    @Async
+    public boolean passedTasks(){
+        try{
+            var notPassedTasks =  _iTaskRepository.getAllByPassedIsFalse();
+            notPassedTasks.parallelStream().forEach(x -> {
+                x.setPassed(true);
+                _iTaskRepository.save(x);
+            });
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
 
     public ArrayList<Task> getAllTasks(){
         try{

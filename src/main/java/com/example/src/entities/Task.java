@@ -1,5 +1,6 @@
 package com.example.src.entities;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -34,6 +35,10 @@ public class Task{
 
     @Column(name="end_time", nullable=false)
     private LocalDateTime endTime;
+
+    @Builder.Default
+    @Column(name="passed")
+    private Boolean passed = false;
 
     @CreatedDate
     @Column(name="created_date", nullable= false, updatable = false)
