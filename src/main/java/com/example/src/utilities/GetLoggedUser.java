@@ -3,6 +3,7 @@ package com.example.src.utilities;
 import com.example.src.entities.User;
 import com.example.src.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
+import lombok.var;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

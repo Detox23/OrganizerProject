@@ -8,7 +8,7 @@ import com.example.src.utilities.GetLoggedUser;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
+import lombok.var;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

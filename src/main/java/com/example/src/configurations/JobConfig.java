@@ -4,6 +4,7 @@ import com.example.src.services.TaskService;
 import com.example.src.utilities.ATestJob;
 import lombok.AllArgsConstructor;
 import org.quartz.*;
+import lombok.var;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
