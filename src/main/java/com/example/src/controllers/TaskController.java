@@ -7,12 +7,10 @@ import com.example.src.utilities.DateFormatter;
 import com.example.src.utilities.ResponseCreator;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -34,14 +32,14 @@ public class TaskController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<?> getAllTasks(){
         var result = _taskService.getAllTasks();
-        return ResponseCreator.createResponseMessage(result, HttpStatus.FOUND);
+        return ResponseCreator.createResponseMessage(result, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{date}", method = RequestMethod.GET)
     public ResponseEntity<?> getTasksForDay(@PathVariable String date){
         var formattedDate = DateFormatter.getLocalDateTimeFromString(date);
         var result = _taskService.getTasksForDay(formattedDate);
-        return ResponseCreator.createResponseMessage(result, HttpStatus.FOUND);
+        return ResponseCreator.createResponseMessage(result, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

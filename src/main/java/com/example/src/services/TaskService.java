@@ -3,6 +3,7 @@ package com.example.src.services;
 import com.example.src.entities.Task;
 import com.example.src.repositories.ITaskRepository;
 import com.example.src.repositories.IUserRepository;
+import com.example.src.utilities.DateFormatter;
 import com.example.src.utilities.GetLoggedUser;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -22,10 +23,14 @@ public class TaskService {
     private final IUserRepository _iUserRepository;
 
     @Transactional(rollbackOn = Exception.class)
-    public Task createTask(Task task){
+    public ArrayList<Task> createTask(Task task){
         try{
             var result = _iTaskRepository.save(task);
-            return result;
+            var toReturn = getTasksForDay(DateFormatter.getLocalDateTimeFromString(
+                    result.getStartTime().getYear() + "-" +
+                            result.getStartTime().getMonthValue() + "-"+
+                            result.getStartTime().getDayOfMonth()));
+            return toReturn;
         }catch(Exception exception){
             return null;
 
@@ -61,7 +66,7 @@ public class TaskService {
         try{
             GetLoggedUser getLoggedUser = new GetLoggedUser(_iUserRepository);
             var endDate = date.plusDays(1L);
-            return _iTaskRepository.getAllByUserIsAndStartTimeAfterAndEndTimeBefore(
+            return _iTaskRepository.getAllByUserIsAndStartTimeAfterAndEndTimeBeforeOrderByStartTime(
                     getLoggedUser.getCurrentUser(),
                     date,
                     endDate

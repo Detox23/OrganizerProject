@@ -13,5 +13,5 @@ import java.util.UUID;
 public interface ITaskRepository extends JpaRepository<Task, UUID> {
     ArrayList<Task> getAllByPassedIsFalse();
     ArrayList<Task> getAllByUserIs(User user);
-    ArrayList<Task> getAllByUserIsAndStartTimeAfterAndEndTimeBefore(User user, LocalDateTime start, LocalDateTime end);
+    ArrayList<Task> getAllByUserIsAndStartTimeAfterAndEndTimeBeforeOrderByStartTime(User user, LocalDateTime start, LocalDateTime end);
 }
