@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
 
     private final BCryptPasswordEncoder _bCryptPasswordEncoder;
 
-    private final EmailService _emailService;
+//    private final EmailService _emailService;
 
     private final IUserRepository _iUserRepository;
 
@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
             user.setConfirmationToken(confirmationToken);
             final User createdUser = _iUserRepository.save(user);
             if(result){
-                _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/%s", confirmationToken.getConfirmationToken()));
+//                _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/%s", confirmationToken.getConfirmationToken()));
             }
             return createdUser;
         }catch(Exception exception){
