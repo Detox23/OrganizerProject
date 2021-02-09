@@ -27,9 +27,7 @@ public class TaskService {
         try{
             var result = _iTaskRepository.save(task);
             var toReturn = getTasksForDay(DateFormatter.getLocalDateTimeFromString(
-                    result.getStartTime().getYear() + "-" +
-                            result.getStartTime().getMonthValue() + "-"+
-                            result.getStartTime().getDayOfMonth()));
+                    result.getStartTime().toLocalDate().toString()));
             return toReturn;
         }catch(Exception exception){
             return null;
@@ -53,10 +51,16 @@ public class TaskService {
     }
 
 
+    /**
+     * Method that returns all tasks for logged user.
+     *
+     * @return All tasks
+     */
     public ArrayList<Task> getAllTasks(){
         try{
             GetLoggedUser getLoggedUser = new GetLoggedUser(_iUserRepository);
-            return _iTaskRepository.getAllByUserIs(getLoggedUser.getCurrentUser());
+            var tasks = _iTaskRepository.getAllByUserIs(getLoggedUser.getCurrentUser());
+            return tasks;
         }catch (Exception exception){
             return null;
         }
@@ -65,12 +69,14 @@ public class TaskService {
     public ArrayList<Task> getTasksForDay(LocalDateTime date){
         try{
             GetLoggedUser getLoggedUser = new GetLoggedUser(_iUserRepository);
+            var currentUser = getLoggedUser.getCurrentUser();
             var endDate = date.plusDays(1L);
-            return _iTaskRepository.getAllByUserIsAndStartTimeAfterAndEndTimeBeforeOrderByStartTime(
-                    getLoggedUser.getCurrentUser(),
+            var result = _iTaskRepository.getAllByUserIsAndStartTimeAfterAndEndTimeBeforeOrderByStartTime(
+                    currentUser,
                     date,
                     endDate
             );
+            return result;
         }catch (Exception exception){
             return null;
         }
@@ -80,7 +86,8 @@ public class TaskService {
     public ArrayList<Task> deleteTask(UUID taskId){
         try{
             _iTaskRepository.deleteById(taskId);
-            return getAllTasks();
+            var tasks =  getAllTasks();
+            return tasks;
         }catch (Exception exception){
             return null;
         }

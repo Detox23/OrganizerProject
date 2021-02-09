@@ -46,7 +46,7 @@ public class TaskController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteTask(@PathVariable UUID id){
         var result = _taskService.deleteTask(id);
-        return ResponseCreator.createResponseMessage(result, HttpStatus.FOUND);
+        return ResponseCreator.createResponseMessage(result, HttpStatus.ACCEPTED);
     }
 
 
