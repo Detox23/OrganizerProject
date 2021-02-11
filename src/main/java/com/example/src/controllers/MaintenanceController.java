@@ -22,6 +22,7 @@ public class MaintenanceController {
 
     private final ModelMapper _modelMapper;
 
+
     @RequestMapping(value = "/seedDb", method = RequestMethod.POST)
     public ResponseEntity<?> seedDb(){
         UserForCreation userForCreation = new UserForCreation("Admin", "Admin", "jakub23sa@wp.pl", "password");
