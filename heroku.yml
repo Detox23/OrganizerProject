@@ -1,3 +1,0 @@
-build:
-  docker:
-    web: /cxf-spring-boot-starter-samples/cxf-boot-simple/Dockerfile
