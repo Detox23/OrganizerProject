@@ -17,8 +17,8 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <diffChangeLogFile>src/main/resources/db/changelog/to-be-changed.yaml</diffChangeLogFile>
         <java.version>11</java.version>
+        <spring-boot-admin.version>2.3.0</spring-boot-admin.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
     </properties>
 
@@ -89,7 +89,6 @@
             <artifactId>jjwt-api</artifactId>
             <version>0.10.5</version>
         </dependency>
-
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
@@ -164,9 +163,7 @@
     </dependencyManagement>
 
     <build>
-
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
