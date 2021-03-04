@@ -50,10 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/api/maintenance/healthCheck",
+                        "/api/maintenance/",
                         "/api/maintenance/seedDb",
                         "/api/auth/signup",
                         "/api/auth/signin",
-                        "/api/auth/**")
+                        "/api/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

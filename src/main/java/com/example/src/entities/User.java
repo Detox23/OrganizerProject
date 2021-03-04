@@ -2,10 +2,13 @@ package com.example.src.entities;
 
 import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -54,6 +57,14 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="confirmation_tokens_id", referencedColumnName = "id")
     private ConfirmationToken confirmationToken;
+
+    @CreatedDate
+    @Column(name = "created_date", nullable = false, updatable = false)
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date", nullable = false)
+    private LocalDateTime modified;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

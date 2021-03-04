@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.net.NetworkInterface;
+import java.net.SocketException;
+
 @Configuration
 @ComponentScan({"com.example.src.configurations", "com.example.src.controllers", "com.example.src.services", "com.example.src.repositories"})
 @EnableTransactionManagement
@@ -15,7 +18,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories("com.example.src.repositories")
 @SpringBootApplication
 public class ListsToDoApplication {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SocketException {
+
         SpringApplication.run(ListsToDoApplication.class, args);
     }
 

@@ -1,10 +1,12 @@
 package com.example.src.services;
 
 import com.example.src.entities.ConfirmationToken;
+import com.example.src.entities.EmailTemplateType;
 import com.example.src.entities.User;
 import com.example.src.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.var;
+import org.apache.catalina.startup.Tomcat;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +25,7 @@ public class UserService implements UserDetailsService {
 
     private final BCryptPasswordEncoder _bCryptPasswordEncoder;
 
-//    private final EmailService _emailService;
+    private final EmailService _emailService;
 
     private final IUserRepository _iUserRepository;
 
@@ -41,7 +44,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public User signUpUser(User user){
+    public User signUpUser(User user, String host){
         try{
             final String encryptedPassword = _bCryptPasswordEncoder.encode(user.getPassword());
             final ConfirmationToken confirmationToken = new ConfirmationToken();
@@ -50,7 +53,7 @@ public class UserService implements UserDetailsService {
             user.setConfirmationToken(confirmationToken);
             final User createdUser = _iUserRepository.save(user);
             if(result){
-//                _emailService.sendMessage(user.getEmail(), "Invitation", String.format("localhost:8080/api/auth/%s", confirmationToken.getConfirmationToken()));
+                _emailService.sendConfirmationMail(createdUser);
             }
             return createdUser;
         }catch(Exception exception){
@@ -71,6 +74,7 @@ public class UserService implements UserDetailsService {
     public String acceptUser(String confirmationToken){
         var token = _confirmationTokenService.getTokenId(confirmationToken);
         if(token == null){
+
             return "Confirmation token was not found.";
         }
         var confirmationUser = _iUserRepository.findByConfirmationTokenIs(token);
@@ -95,6 +99,8 @@ public class UserService implements UserDetailsService {
             return "User does not exist.";
         }
     }
+
+
 
 //    public void confirmUser(ConfirmationToken confirmationToken){
 //        final User user = confirmationToken.getUser();
