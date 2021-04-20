@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,9 @@ public class User implements UserDetails {
 
     @Id
     @Column(name="id", nullable = false, updatable = false, unique = true)
-    private UUID id = UUID.randomUUID();
+    @GenericGenerator(name = "UUID", strategy="org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(generator = "UUID")
+    private UUID id;
 
     @Column(name="name", nullable = false)
     private String name;

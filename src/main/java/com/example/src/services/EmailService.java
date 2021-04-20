@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import org.apache.catalina.startup.Tomcat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -27,19 +29,33 @@ public class EmailService {
     private final Tomcat tomcat;
 
     public void sendConfirmationMail(User user){
-        SimpleMailMessage message = new SimpleMailMessage();
-        LOGGER.info(String.format("HOST: %s", tomcat.getHost().getName()));
-        AtomicReference<String> url = new AtomicReference<>("");
-        if(tomcat.getHost().getName() == "localhost"){
+        try{
 
-            url.set(String.format("http://%s:%s/api/auth/%s", tomcat.getHost().getName(), "8080", user.getConfirmationToken().getConfirmationToken()));
-        }else{
-            url.set(String.format("http://%s/api/auth/%s", tomcat.getHost().getName(), "8080", user.getConfirmationToken().getConfirmationToken()));
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper =
+                    new MimeMessageHelper(
+                            message,
+                            MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                            StandardCharsets.UTF_8.name());
+
+
+            LOGGER.info(String.format("HOST: %s", tomcat.getHost().getName()));
+            AtomicReference<String> url = new AtomicReference<>("");
+            if(tomcat.getHost().getName().equals("localhost")){
+                url.set(String.format("http://%s:%s/api/auth/%s", tomcat.getHost().getName(), "8080", user.getConfirmationToken().getConfirmationToken()));
+            }else{
+                url.set(String.format("http://%s/api/auth/%s", tomcat.getHost().getName()+"8080", user.getConfirmationToken().getConfirmationToken()));
+            }
+
+            helper.setTo(user.getEmail());
+            helper.setText(_iEmailTemplateRepository.getByTypeIs(EmailTemplateType.ACTIVATION).getContent().replace("%URL%", url.get()), true);
+            helper.setSubject("Account activation");
+            helper.setFrom("jkplanner");
+            javaMailSender.send(message);
+
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
         }
-        message.setFrom("Planner");
-        message.setText(_iEmailTemplateRepository.getByTypeIs(EmailTemplateType.ACTIVATION).getContent().replace("%URL%", url.get()));
-        message.setTo(user.getEmail());
-        message.setSubject("Account activation");
-        javaMailSender.send(message);
+
     }
 }

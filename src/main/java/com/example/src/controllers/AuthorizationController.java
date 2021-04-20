@@ -4,7 +4,6 @@ import com.example.src.dtos.UserForCreation;
 import com.example.src.dtos.UserForReturn;
 import com.example.src.entities.User;
 import com.example.src.services.UserService;
-import com.example.src.utilities.ResponseCreator;
 import lombok.AllArgsConstructor;
 import lombok.var;
 import org.modelmapper.ModelMapper;
@@ -13,11 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @AllArgsConstructor
@@ -25,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthorizationController {
 
 
-    private Environment environment;
+    private final Environment environment;
 
     private final UserService userService;
 
@@ -48,7 +45,7 @@ public class AuthorizationController {
         if(current[0].equals("dev")){
             redirectView.setUrl("http://localhost:3000");
         }else{
-            redirectView.setUrl("https://zen-mcnulty-816b60.netlify.app");
+            redirectView.setUrl("http://jkplanner.pl");
         }
         return redirectView;
     }

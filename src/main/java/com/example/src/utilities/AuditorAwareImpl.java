@@ -29,7 +29,6 @@ public class AuditorAwareImpl implements AuditorAware<User> {
             return null;
         }
 
-
         var username = authentication.getPrincipal().toString();
         var returnUser = _iUserRepository.findByEmail(username);
         return returnUser;

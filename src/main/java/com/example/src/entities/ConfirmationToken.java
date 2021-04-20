@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -22,7 +20,9 @@ public class ConfirmationToken {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false, unique = true)
-    private UUID id = UUID.randomUUID();
+    @GenericGenerator(name = "UUID", strategy="org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(generator = "UUID")
+    private UUID id;
 
     @Column(name="confirmation_token", nullable=false)
     private String confirmationToken = UUID.randomUUID().toString();

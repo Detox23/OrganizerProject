@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -26,7 +27,9 @@ public class EmailTemplate implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false, unique = true)
-    private UUID id = UUID.randomUUID();
+    @GenericGenerator(name = "UUID", strategy="org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(generator = "UUID")
+    private UUID id;
 
     @CreatedDate
     @Column(name = "created_date", nullable = false, updatable = false)

@@ -3,6 +3,7 @@ package com.example.src.entities;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -22,7 +23,9 @@ public class Task{
 
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
-    private UUID id = UUID.randomUUID();
+    @GenericGenerator(name = "UUID", strategy="org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(generator = "UUID")
+    private UUID id;
 
     @Column(name="description", nullable=false)
     private String description;
@@ -49,12 +52,12 @@ public class Task{
     private LocalDateTime modified;
 
     @CreatedBy
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="crete_user_id", referencedColumnName = "id")
     private User user;
 
     @LastModifiedBy
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="modify_user_id", referencedColumnName = "id")
     private User modifiedBy;
 
