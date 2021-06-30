@@ -3,7 +3,6 @@ package com.example.src.services;
 import com.example.src.entities.ConfirmationToken;
 import com.example.src.repositories.IConfirmationTokenRepository;
 import lombok.AllArgsConstructor;
-import lombok.var;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,12 +1,9 @@
 package com.example.src.services;
 
 import com.example.src.entities.ConfirmationToken;
-import com.example.src.entities.EmailTemplateType;
 import com.example.src.entities.User;
 import com.example.src.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
-import lombok.var;
-import org.apache.catalina.startup.Tomcat;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 

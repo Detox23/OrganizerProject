@@ -1,24 +1,29 @@
 package com.example.src.controllers;
 
-import com.example.src.configurations.EmailTemplates;
 import com.example.src.entities.*;
 import com.example.src.repositories.IConfirmationTokenRepository;
 import com.example.src.repositories.IEmailTemplateRepository;
 import com.example.src.repositories.IUserRepository;
-import com.example.src.services.EmailService;
 import com.example.src.utilities.ResponseCreator;
 import lombok.AllArgsConstructor;
-import lombok.var;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,8 +35,6 @@ public class MaintenanceController {
 
     private final IUserRepository _iUserRepository;
 
-    private final EmailService _emailService;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(MaintenanceController.class);
 
     private final BCryptPasswordEncoder _bCryptPasswordEncoder;
@@ -42,7 +45,7 @@ public class MaintenanceController {
 
     @Transactional(rollbackOn = Exception.class)
     @RequestMapping(value = "/seedDb", method = RequestMethod.GET)
-    public ResponseEntity<?> seedDb(){
+    public ResponseEntity<?> seedDb() throws IOException {
         var isUsersSeeded = seedUsersTable();
         LOGGER.info(String.format("Was user and confirmation token table seeded? %b", isUsersSeeded));
         var isTemplatesSeeded = seedTemplates();
@@ -51,9 +54,10 @@ public class MaintenanceController {
     }
 
 
-    private boolean seedTemplates(){
+    private boolean seedTemplates() throws IOException {
         if(_iEmailTemplateRepository.count() == 0L){
-            EmailTemplate emailTemplate = new EmailTemplate(UUID.randomUUID(), null, null, EmailTemplateType.ACTIVATION, EmailTemplates.getEmailTemplate());
+            var welcomeMailContent = Files.readString(Path.of(ResourceUtils.getFile("classpath:templates/Welcome_mail.html").getPath()), StandardCharsets.UTF_8);
+            EmailTemplate emailTemplate = new EmailTemplate(UUID.randomUUID(), null, null, EmailTemplateType.ACTIVATION, welcomeMailContent);
             _iEmailTemplateRepository.save(emailTemplate);
             return true;
         }

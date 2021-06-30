@@ -76,10 +76,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return source;
     }
-
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-//        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
-//    }
-
 }

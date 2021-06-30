@@ -5,7 +5,6 @@ import com.example.src.dtos.UserForReturn;
 import com.example.src.entities.User;
 import com.example.src.services.UserService;
 import lombok.AllArgsConstructor;
-import lombok.var;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 @AllArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthorizationController {
-
 
     private final Environment environment;
 
@@ -39,7 +37,7 @@ public class AuthorizationController {
 
     @RequestMapping(value = "/{confirmationToken}", method = RequestMethod.GET)
     public RedirectView confirmAccount(@PathVariable String confirmationToken){
-        var result = userService.acceptUser(confirmationToken);
+        userService.acceptUser(confirmationToken);
         var current = environment.getActiveProfiles();
         RedirectView redirectView = new RedirectView();
         if(current[0].equals("dev")){

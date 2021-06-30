@@ -3,9 +3,7 @@ package com.example.src.controllers;
 import com.example.src.dtos.TaskForCreation;
 import com.example.src.entities.Task;
 import com.example.src.services.TaskService;
-import com.example.src.utilities.DateFormatter;
 import com.example.src.utilities.ResponseCreator;
-import lombok.var;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @RestController

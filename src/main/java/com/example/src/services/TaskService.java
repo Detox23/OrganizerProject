@@ -7,10 +7,9 @@ import com.example.src.repositories.ITaskRepository;
 import com.example.src.repositories.IUserRepository;
 import com.example.src.utilities.GetLoggedUser;
 import lombok.AllArgsConstructor;
-import lombok.var;
-import org.joda.time.Interval;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -64,19 +63,19 @@ public class TaskService {
         return result.get();
     }
 
-//    @Async
-//    public boolean passedTasks(){
-//        try{
-//            var notPassedTasks =  _iTaskRepository.getAllByPassedIsFalse();
-//            notPassedTasks.parallelStream().forEach(x -> {
-//                x.setPassed(true);
-//                _iTaskRepository.save(x);
-//            });
-//            return true;
-//        }catch (Exception e){
-//            return false;
-//        }
-//    }
+    @Async
+    public boolean passedTasks(){
+        try{
+            var notPassedTasks =  _iTaskRepository.getAllByPassedIsFalse();
+            notPassedTasks.parallelStream().forEach(x -> {
+                x.setPassed(true);
+                _iTaskRepository.save(x);
+            });
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 
 
     /**
