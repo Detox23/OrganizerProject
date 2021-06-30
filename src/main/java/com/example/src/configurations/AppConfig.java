@@ -32,9 +32,9 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AppConfig {
 
-    private JobScheduler jobScheduler;
+    private final JobScheduler jobScheduler;
 
-    private JobService sampleJobService;
+    private final JobService sampleJobService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfig.class);
 
