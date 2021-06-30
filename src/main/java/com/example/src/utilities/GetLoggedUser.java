@@ -12,7 +12,6 @@ public class GetLoggedUser {
 
     private final IUserRepository _iUserRepository;
 
-
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -11,7 +11,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
@@ -34,10 +36,13 @@ public class Task{
     private String title;
 
     @Column(name="start_time", nullable=false)
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
     @Column(name="end_time", nullable=false)
-    private LocalDateTime endTime;
+    private LocalTime endTime;
+
+    @Column(name="date", nullable = false)
+    private LocalDate date;
 
     @Builder.Default
     @Column(name="passed")

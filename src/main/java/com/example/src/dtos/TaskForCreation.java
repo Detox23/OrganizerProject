@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class TaskForCreation {
     public String description;
     public String title;
-    public LocalDateTime startTime;
-    public LocalDateTime endTime;
+    public LocalDate date;
+    public LocalTime startTime;
+    public LocalTime endTime;
 }
