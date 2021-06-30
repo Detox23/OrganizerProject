@@ -9,7 +9,6 @@ import com.example.src.utilities.GetLoggedUser;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -63,20 +62,6 @@ public class TaskService {
         return result.get();
     }
 
-    @Async
-    public boolean passedTasks(){
-        try{
-            var notPassedTasks =  _iTaskRepository.getAllByPassedIsFalse();
-            notPassedTasks.parallelStream().forEach(x -> {
-                x.setPassed(true);
-                _iTaskRepository.save(x);
-            });
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
 
     /**
      * Method that returns all tasks for logged user.
@@ -87,7 +72,7 @@ public class TaskService {
         try{
             var user = new GetLoggedUser(_iUserRepository).getCurrentUser();
             var found = _iTaskRepository.getAllByUserIs(user);
-            Collections.sort(found, Comparator.comparing(Task::getStartTime));
+            found.sort(Comparator.comparing(Task::getStartTime));
             return (ArrayList<TaskDto>) modelMapper.map(found, new TypeToken<ArrayList<TaskDto>>() {}.getType());
         }catch (Exception exception){
             return null;
@@ -98,7 +83,7 @@ public class TaskService {
         try{
             var user = new GetLoggedUser(_iUserRepository).getCurrentUser();
             var found = _iTaskRepository.getAllByDateIsAndUserIs(date, user);
-            Collections.sort(found, Comparator.comparing(Task::getStartTime));
+            found.sort(Comparator.comparing(Task::getStartTime));
             return (ArrayList<TaskDto>) modelMapper.map(found, new TypeToken<ArrayList<TaskDto>>() {}.getType());
         }catch (Exception exception){
             return null;

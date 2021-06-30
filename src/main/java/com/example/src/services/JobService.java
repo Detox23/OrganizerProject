@@ -1,29 +1,29 @@
 package com.example.src.services;
 
+import com.example.src.entities.Task;
+import com.example.src.repositories.ITaskRepository;
+import lombok.AllArgsConstructor;
 import org.jobrunr.jobs.annotations.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class JobService {
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final ITaskRepository _iTaskRepository;
 
-    @Job(name = "The sample job without variable")
-    public void execute() {
-        execute("Hello asdasdasdasd world!");
-    }
-
-    @Job(name = "The sample job with variable %0")
-    public void execute(String input) {
-        logger.info("The sample job has begun. The variable you passed is {}", input);
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            logger.error("Error while executing sample job", e);
-        } finally {
-            logger.info("Sample job has finished...");
+    @Job()
+    public void executePassedTasks() {
+        try{
+            var notPassedTasks =  _iTaskRepository.getAllByPassedIsFalse();
+            notPassedTasks.parallelStream().forEach(x -> {
+                x.setPassed(true);
+                _iTaskRepository.save(x);
+            });
+        }catch (Exception e){
+            System.out.println(e);
         }
     }
 }

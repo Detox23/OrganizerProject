@@ -1,8 +1,11 @@
 package com.example.src.configurations;
 
 import com.example.src.entities.User;
+import com.example.src.services.JobService;
 import com.example.src.utilities.AuditorAwareImpl;
+import lombok.AllArgsConstructor;
 import org.apache.catalina.startup.Tomcat;
+import org.jobrunr.scheduling.JobScheduler;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,8 +28,13 @@ import java.util.concurrent.Executor;
 
 @Configuration
 @EnableJpaAuditing
+@AllArgsConstructor
 @EnableAsync
-public class AppConfig implements WebMvcConfigurer {
+public class AppConfig {
+
+    private JobScheduler jobScheduler;
+
+    private JobService sampleJobService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfig.class);
 
@@ -63,8 +74,17 @@ public class AppConfig implements WebMvcConfigurer {
         return executor;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*");
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        LOGGER.debug("CREATING CORS CONFIGURATION BEAN");
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
+
+    @Bean
+    public void aTestJob() {
+        jobScheduler.scheduleRecurrently("* * * * *", () -> sampleJobService.executePassedTasks());
+    }
+
 }

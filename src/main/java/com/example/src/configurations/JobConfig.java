@@ -11,16 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 public class JobConfig {
 
-    @Autowired // or @Inject
-    private JobScheduler jobScheduler;
-
-    @Autowired // or @Inject
-    private JobService sampleJobService;
 
 
-    @Bean
-    public void aTestJob() {
-        jobScheduler.enqueue(() -> sampleJobService.execute());
-    }
+
 
 }

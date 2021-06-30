@@ -35,13 +35,13 @@ public class MaintenanceController {
 
     private final IUserRepository _iUserRepository;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MaintenanceController.class);
-
     private final BCryptPasswordEncoder _bCryptPasswordEncoder;
 
     private final IEmailTemplateRepository _iEmailTemplateRepository;
 
     private final IConfirmationTokenRepository _iConfirmationTokenRepository;
+
+    private final Logger LOGGER = LoggerFactory.getLogger(MaintenanceController.class);
 
     @Transactional(rollbackOn = Exception.class)
     @RequestMapping(value = "/seedDb", method = RequestMethod.GET)
@@ -53,10 +53,16 @@ public class MaintenanceController {
         return ResponseCreator.createResponseMessage("Database seeded", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/healthCheck", method = RequestMethod.GET)
+    public ResponseEntity<?> healthCheck(){
+        LOGGER.info(String.format("Health check method invoked on: %s %s", LocalDateTime.now().toLocalDate().toString(), LocalDateTime.now().toLocalTime().toString()));
+        return ResponseCreator.createResponseMessage("Successfully health check", HttpStatus.OK);
+    }
+
 
     private boolean seedTemplates() throws IOException {
         if(_iEmailTemplateRepository.count() == 0L){
-            var welcomeMailContent = Files.readString(Path.of(ResourceUtils.getFile("classpath:templates/Welcome_mail.html").getPath()), StandardCharsets.UTF_8);
+            var welcomeMailContent = Files.readString(Path.of(ResourceUtils.getFile("classpath:templates/welcome_mail.html").getPath()), StandardCharsets.UTF_8);
             EmailTemplate emailTemplate = new EmailTemplate(UUID.randomUUID(), null, null, EmailTemplateType.ACTIVATION, welcomeMailContent);
             _iEmailTemplateRepository.save(emailTemplate);
             return true;
@@ -85,10 +91,6 @@ public class MaintenanceController {
 
 
 
-    @RequestMapping(value = "/healthCheck", method = RequestMethod.GET)
-    public ResponseEntity<?> healthCheck(){
-        LOGGER.info(String.format("Health check method invoked on: %s %s", LocalDateTime.now().toLocalDate().toString(), LocalDateTime.now().toLocalTime().toString()));
-        return ResponseCreator.createResponseMessage("Successfully health check", HttpStatus.OK);
-    }
+
 
 }

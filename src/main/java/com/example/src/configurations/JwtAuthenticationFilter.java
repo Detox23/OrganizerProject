@@ -29,19 +29,19 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager _authenticationManager;
 
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager){
+        this._authenticationManager = authenticationManager;
+        setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
+    }
+
     @Override
     @Autowired
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         super.setAuthenticationManager(authenticationManager);
     }
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager){
-        this._authenticationManager = authenticationManager;
-        setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
-    }
-
-    @SneakyThrows
     @Override
+    @SneakyThrows
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         var requestData = request.getReader().lines().collect(Collectors.joining());
         Gson gson = new Gson();

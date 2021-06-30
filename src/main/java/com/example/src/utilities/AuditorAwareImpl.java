@@ -20,12 +20,10 @@ public class AuditorAwareImpl implements AuditorAware<User> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
+            return _iUserRepository.findByEmail("admin@gmail.com");
         }
 
         var username = authentication.getPrincipal().toString();
-        var returnUser = _iUserRepository.findByEmail(username);
-        return returnUser;
-
+        return _iUserRepository.findByEmail(username);
     }
 }
